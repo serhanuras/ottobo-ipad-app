@@ -10,8 +10,7 @@ class Scanner extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.width)
-        console.log(this.props.height)
+      
         Quagga.init({
             inputStream: {
                 type : "LiveStream",
@@ -42,12 +41,6 @@ class Scanner extends Component {
     componentWillUnmount() {
         Quagga.offDetected(this.props.onDetected);
     }
-
-    // _onDetected(result) {
-    //     //console.log(result);
-    //     console.log(this.props)
-        
-    // }
 };
 
 export default Scanner;

@@ -12,7 +12,7 @@ function Header() {
             <Col className="col1">
                 <FiMonitor />
             </Col>
-            <Col xs={7}>
+            <Col xs={5}>
                 <div className="col2">
                     <img src={logo} alt="Logo" className="logo" />
                 </div>

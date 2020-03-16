@@ -7,10 +7,6 @@ body{
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -53,7 +49,7 @@ body{
 }
 
 .Header-row .col1{
-  font-size: 24px;
+  font-size: 40px;
 }
 
 .Header-row .col2{
@@ -65,15 +61,15 @@ body{
 }
 
 .Header-row .col3 div:first-child{
-  font-size: 18px;
+  font-size: 34px;
 }
 
 .Header-row .col3 div{
-  font-size: 13px;
+  font-size: 20px;
 }
 
 .Header-row .logo{
-  height: 30px;
+  height: 60px;
 }
 
 @media only screen 
@@ -82,7 +78,7 @@ body{
   and (orientation: portrait) 
   and (-webkit-min-device-pixel-ratio: 1.5) {
     .Header-row .col1{
-      font-size: 30px;
+      font-size: 50px;
     }
 
     .Header-row .col2{
@@ -94,15 +90,15 @@ body{
     }
 
     .Header-row .col3 div:first-child{
-      font-size: 24px;
+      font-size: 54px;
     }
 
     .Header-row .col3 div{
-      font-size: 16px;
+      font-size: 26px;
     }
 
     .Header-row .logo{
-      height: 50px;
+      height: 80px;
     }
 }
 
@@ -115,10 +111,11 @@ body{
 }
 
 .bottom .button{
-  padding-bottom: 10px; 
-  padding-top:10px;
-  font-size: 18px;
-  font-weight: 600;
+  padding-bottom: 20px; 
+  padding-top:20px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 20px;
 }
 
 @media only screen 
@@ -132,30 +129,33 @@ body{
     }
 
     .bottom .button{
-      padding-bottom: 15px; 
-      padding-top:15px;
-      font-size: 23px;
+      padding-bottom: 25px; 
+      padding-top:25px;
+      font-size: 33px;
       font-weight: 600;
+      margin-top: 30px;
     }
 }
 
 /* ORDER */
 
 .order {
-  padding-top: 100px;
+  padding-top: 150px;
   margin-bottom: 30px;
 }
 
 .order .productImage{
 
   width: 100%;
-  height: 350px;
+  height: 400px;
   background-repeat: no-repeat;
   background-size: contain;
   background-position-x: center;
   background-position-y: center;
   
 }
+
+
 
 .order .numbers{
   font-size: 25px;
@@ -198,14 +198,56 @@ body{
   padding-left: 15px;
 }
 
+.order .title{
+  font-size: 35px;
+  font-weight: 800;
+  color:#007bff;
+  margin-bottom:50px;
+  margin-top:25px;
+ 
+}
+
+.order .position {
+  font-size: 35px;
+  font-weight: 600;
+  margin-top: 50px;
+}
+
+.order .drawingBuffer{
+
+  height: 10px;
+  
+}
+
+.order #interactive{
+  margin-top: 20px;
+}
+
+.order .barcode{
+  font-size:90px;
+}
+
 @media only screen 
   and (min-width: 1024px) 
   and (max-height: 1366px) 
   and (orientation: portrait) 
   and (-webkit-min-device-pixel-ratio: 1.5) {
 
+    .order .drawingBuffer{
+
+      height: 10px;
+      
+    }
+    
+    .order .barcode{
+      font-size:120px;
+    }
+    .order #interactive{
+      margin-top: 100px;
+    }
+
     .order {
-      padding-top: 90px;
+      padding-top: 170px;
      
       
     }
@@ -215,7 +257,7 @@ body{
     }
 
     .order .numbers{
-      font-size: 30px;
+      font-size: 35px;
       font-weight: 400;
       padding-top: 120px;
     }
@@ -232,7 +274,6 @@ body{
       width: 60px;
       height: 60px;
       font-size: 30px;
-      
     }
 
     .order .cart {
@@ -252,6 +293,21 @@ body{
     .order .cart .itemLabel{
       font-size: 44px;
       padding-left: 15px;
+    }
+
+    .order .title{
+      font-size: 45px;
+      font-weight: 900;
+      color:#007bff;
+      margin-bottom:60px;
+      margin-top:20px;
+     
+    }
+
+    .order .position {
+      font-size: 45px;
+      font-weight: 600;
+      margin-top: 70px;
     }
     
   }

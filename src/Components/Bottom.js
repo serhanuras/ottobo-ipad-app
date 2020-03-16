@@ -1,15 +1,28 @@
 import React from 'react';
-import { Navbar, Button } from 'react-bootstrap';
+import { Navbar, Button, Row, Col, Container } from 'react-bootstrap';
 import '../App.css';
 
 
-function Bottom() {
+const Bottom  = props =>{
     return (
-        <Navbar fixed="bottom" className="bottom" >
-            <Button variant="success" size="lg" block className="button">
-                CONFIRM PICKING
-        </Button>
-        </Navbar>
+        <Container fluid className="bottom">
+            <Row>
+                <Col>
+
+                    <Button variant="info" size="lg" block className="button" onClick={props.onScannedButtonClick}>
+                        SCAN BARCODE
+                    </Button>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Button variant="success" size="lg" block className="button" onClick={props.onConfirmedButtonClick}>
+                        CONFIRM PICKING
+             </Button>
+                </Col>
+            </Row>
+        </Container>
+
 
     );
 }
