@@ -63,9 +63,9 @@ app.post("/orders", (req, res) => {
         orderId: "5737804577",
         basketId: 1,
         orderCode: "SMA-2881001",
-        orderName: "SMA-2881001",
+        orderName: "APTAMIL MAMA",
         imageUrl:
-          "https://productimages.hepsiburada.net/s/25/551/10120914501682.jpg",
+          "https://productimages.hepsiburada.net/s/36/551/10533146034226.jpg/format:webp",
         barcode: "8699795091083",
         trackId: 1,
         quantity: 2
