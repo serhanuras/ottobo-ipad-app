@@ -2,7 +2,7 @@
 
 export const  getServerURL=()=>{
 
-    return 'http://localhost:3030';
+    return 'https://salty-depths-48203.herokuapp.com';
 };
 
 
