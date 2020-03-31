@@ -147,7 +147,7 @@ body{
 .order .productImage{
 
   width: 100%;
-  height: 400px;
+  height: 500px;
   background-repeat: no-repeat;
   background-size: contain;
   background-position-x: center;
@@ -181,6 +181,7 @@ body{
 
 .order .cart {
   padding-top: 0px;
+  min-height: 500px;
 }
 
 .order .cart .item {
@@ -188,8 +189,8 @@ body{
   background-color: #f8f9fa;
   font-size: 28px;
   font-weight: 300;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 55px;
+  padding-bottom: 55px;
   
 }
 
@@ -253,7 +254,7 @@ body{
     }
 
     .order .productImage{
-      height: 600px;
+      height: 700px;
     }
 
     .order .numbers{
@@ -278,6 +279,7 @@ body{
 
     .order .cart {
       padding-top: 20px;
+      min-height: 730px;
     }
 
     .order .cart .item {
@@ -285,8 +287,8 @@ body{
       background-color: #f8f9fa;
       font-size: 36px;
       font-weight: 600;
-      padding-top: 60px;
-      padding-bottom: 60px;
+      padding-top: 85px;
+      padding-bottom: 85px;
       
     }
 
@@ -312,5 +314,49 @@ body{
     
   }
 
+
+
+  .model .title {
+    font-size: 25px;
+  }
+
+  .model .body {
+    font-size: 20px;
+  }
+
+  .model .button{
+    font-size: 20px;
+    width: 100%;
+    font-weight: 800;
+    padding: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  @media only screen 
+  and (min-width: 1024px) 
+  and (max-height: 1366px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1.5) {
+
+    .model .title {
+      font-size: 35px;
+    }
+
+    .model .body {
+      font-size: 30px;
+    }
+
+
+  .model .button{
+    font-size: 30px;
+    width: 100%;
+    font-weight: 800;
+    padding: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  }
 
   

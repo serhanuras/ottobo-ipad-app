@@ -1,0 +1,36 @@
+.container {
+    padding-top: 350px;
+    margin-bottom: 330px;
+}
+
+.title {
+    font-size: 35px;
+}
+
+.label {
+    font-size: 60px;
+    font-weight: 800;
+}
+
+.completed{
+    height: 200px;
+  }
+  
+
+@media only screen and (min-width: 1024px) and (max-height: 1366px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5) {
+    .container {
+        padding-top: 450px;
+        margin-bottom: 480px;
+    }
+    .title {
+        font-size: 40px;
+    }
+    .label {
+        font-size: 80px;
+        font-weight: 800;
+    }
+
+    .completed{
+        height: 300px;
+      }
+}

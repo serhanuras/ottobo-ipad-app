@@ -1,28 +1,43 @@
 import React from 'react';
-import { Navbar, Button, Row, Col, Container } from 'react-bootstrap';
+import { Button, Row, Col, Container } from 'react-bootstrap';
 import '../App.css';
 
 
-const Bottom  = props =>{
+const Bottom = props => {
     return (
         <Container fluid className="bottom">
-            <Row>
-                <Col>
+            {props.type === 'orderPage' ?
+                <div>
+                    <Row>
+                        <Col>
 
-                    <Button variant="info" size="lg" block className="button" onClick={props.onScannedButtonClick}>
-                        SCAN BARCODE
+                            <Button variant="info" size="lg" block className="button" onClick={() => props.onClick('scan')}>
+                                SCAN BARCODE
                     </Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <Button variant="success" size="lg" block className="button" onClick={props.onConfirmedButtonClick}>
-                        CONFIRM PICKING
-             </Button>
-                </Col>
-            </Row>
-        </Container>
+                        </Col>
+                    </Row>
+                </div> :
+                <div>
 
+
+                    <Row>
+                        <Col>
+                            {props.isRobotWalking ?
+                                <Button variant="warning" size="lg" block className="button" onClick={props.onClick}>
+                                    STOP ROBOT
+                             </Button>
+                                :
+                                <Button variant="danger" size="lg" block className="button" onClick={props.onClick}>
+                                    RESUME TASK
+                             </Button>
+                            }
+                        </Col>
+                    </Row>
+
+                </div>
+
+            }
+        </Container>
 
     );
 }
