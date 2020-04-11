@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import "./App.css";
-import Header from "./Components/Header";
-import { Container } from "react-bootstrap";
-import OrderPage from "./Pages/OrderPage";
-import RoutePage from "./Pages/RoutePage";
-import CompletedPage from "./Pages/CompletedPage";
-import Loader from "./Components/Loader";
 import axios from "axios";
-import * as config from "./config";
+import OrderPage from "./pages/order";
 
-class App extends Component {
+import Routing from "./pages/routing";
+import Completed from "./pages/completed";
+import Loader from "../../components/loader";
+import Hoc from '../../components/hoc';
+import * as config from "../../config";
+import "./order-picking.css";
+
+class OrderPicking extends Component {
   constructor() {
     super();
 
@@ -154,7 +154,7 @@ class App extends Component {
               location: res.data.location
             });
           }
-          else{
+          else {
             this.setState(
               {
                 loading: false,
@@ -187,43 +187,40 @@ class App extends Component {
     }
 
     return (
-      <div className="App" style={{ fontFamily: "Roboto" }}>
-        <Container fluid>
-          <Header />
-          {this.state.loading ? (
-            <Loader height="60px" width="15px" marginTop={width + "px"} />
-          ) : (
+      <Hoc>
+        {this.state.loading ? (
+          <Loader height="60px" width="15px" marginTop={width + "px"} />
+        ) : (
             <div>
               {this.state.isCompleted ? (
-                <CompletedPage />
+                <Completed />
               ) : (
-                <div>
-                  {this.state.isRobotAtDestination ? (
-                    <OrderPage
-                      order={this.state.orders[this.state.currentOrderIndex]}
-                      activeBaskets={this.state.activeBaskets}
-                      location={this.state.location}
-                      nextOrder={this.nextOrderHandler}
-                      gotoNextDestination={this.gotoNextDestination}
-                      isBarcodeControlWorking={
-                        this.state.isBarcodeControlWorking
-                      }
-                    />
-                  ) : (
-                    <RoutePage
-                      onClick={this.changeRobotWalkingState}
-                      isRobotWalking={this.state.isRobotWalking}
-                      location={this.state.location}
-                    />
-                  )}
-                </div>
-              )}
+                  <div>
+                    {this.state.isRobotAtDestination ? (
+                      <OrderPage
+                        order={this.state.orders[this.state.currentOrderIndex]}
+                        activeBaskets={this.state.activeBaskets}
+                        location={this.state.location}
+                        nextOrder={this.nextOrderHandler}
+                        gotoNextDestination={this.gotoNextDestination}
+                        isBarcodeControlWorking={
+                          this.state.isBarcodeControlWorking
+                        }
+                      />
+                    ) : (
+                        <Routing
+                          onClick={this.changeRobotWalkingState}
+                          isRobotWalking={this.state.isRobotWalking}
+                          location={this.state.location}
+                        />
+                      )}
+                  </div>
+                )}
             </div>
           )}
-        </Container>
-      </div>
+      </Hoc>
     );
   }
 }
 
-export default App;
+export default OrderPicking;

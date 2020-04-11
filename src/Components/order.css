@@ -1,0 +1,177 @@
+
+/* ORDER */
+
+.order {
+  padding-top: 150px;
+  margin-bottom: 30px;
+}
+
+.order .productImage{
+
+  width: 100%;
+  height: 500px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-x: center;
+  background-position-y: center;
+  
+}
+
+
+
+.order .numbers{
+  font-size: 25px;
+  font-weight: 400;
+  padding-top: 50px;
+}
+
+.order .quantity {
+  text-align: right;
+  font-size: 35px;
+  font-weight: 600;
+  padding: 10% 0;
+}
+
+.order .quantitybutton{
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  margin: 5px;
+  
+  
+}
+
+.order .cart {
+  padding-top: 0px;
+  min-height: 500px;
+}
+
+.order .cart .item {
+
+  background-color: #f8f9fa;
+  font-size: 28px;
+  font-weight: 300;
+  padding-top: 55px;
+  padding-bottom: 55px;
+  
+}
+
+.order .cart .itemLabel{
+  font-size: 32px;
+  padding-left: 15px;
+}
+
+.order .title{
+  font-size: 35px;
+  font-weight: 800;
+  color:#007bff;
+  margin-bottom:50px;
+  margin-top:25px;
+ 
+}
+
+.order .position {
+  font-size: 35px;
+  font-weight: 600;
+  margin-top: 50px;
+}
+
+.order .drawingBuffer{
+
+  height: 10px;
+  
+}
+
+.order #interactive{
+  margin-top: 20px;
+}
+
+.order .barcode{
+  font-size:90px;
+}
+
+@media only screen 
+  and (min-width: 1024px) 
+  and (max-height: 1366px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1.5) {
+
+    .order .drawingBuffer{
+
+      height: 10px;
+      
+    }
+    
+    .order .barcode{
+      font-size:120px;
+    }
+    .order #interactive{
+      margin-top: 100px;
+    }
+
+    .order {
+      padding-top: 170px;
+     
+      
+    }
+
+    .order .productImage{
+      height: 700px;
+    }
+
+    .order .numbers{
+      font-size: 35px;
+      font-weight: 400;
+      padding-top: 120px;
+    }
+
+
+    .order .quantity {
+      text-align: right;
+      font-size: 45px;
+      font-weight: 600;
+      padding: 10% 0;
+    }
+
+    .order .quantitybutton{
+      width: 60px;
+      height: 60px;
+      font-size: 30px;
+    }
+
+    .order .cart {
+      padding-top: 20px;
+      min-height: 730px;
+    }
+
+    .order .cart .item {
+
+      background-color: #f8f9fa;
+      font-size: 36px;
+      font-weight: 600;
+      padding-top: 85px;
+      padding-bottom: 85px;
+      
+    }
+
+    .order .cart .itemLabel{
+      font-size: 44px;
+      padding-left: 15px;
+    }
+
+    .order .title{
+      font-size: 45px;
+      font-weight: 900;
+      color:#007bff;
+      margin-bottom:60px;
+      margin-top:20px;
+     
+    }
+
+    .order .position {
+      font-size: 45px;
+      font-weight: 600;
+      margin-top: 70px;
+    }
+    
+  }

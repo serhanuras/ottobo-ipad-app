@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import "../App.css";
-import Bottom from "../Components/Bottom";
-import Order from "../Components/Order";
+import Bottom from "../../../components/bottom";
+import Order from "../../../components/order";
 
 class OrderPage extends Component {
   constructor() {

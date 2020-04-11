@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Button, Alert, Modal } from "react-bootstrap";
-import "../App.css";
 import { GiPaperTray } from "react-icons/gi";
 import { FaBarcode } from "react-icons/fa";
-import Scanner from "../Components/Scanner";
+import Scanner from "./scanner";
+import "./order.css";
 
 const Order = props => {
   console.log("arra", props.activeBaskets);
