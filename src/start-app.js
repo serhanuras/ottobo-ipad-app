@@ -1,7 +1,18 @@
 import React from 'react';
+import ReactDOM from "react-dom";
+import { } from "react-router-dom";
+import { Route, BrowserRouter } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Container } from "react-bootstrap";
 import GoogleFontLoader from 'react-google-font-loader';
-import App from './App';
+import OrderPicking from './containers/order-picking-container/order-picking';
+import Header from "./components/header";
+import AsyncImport from "./components/async-import";
+
+
+const AsyncUser = AsyncImport(() => {
+    return import('./containers/user-container/user.js');
+})
 
 const StartApp = () => {
 
@@ -25,8 +36,18 @@ const StartApp = () => {
                 <title>Ottobo</title>
                 <meta http-equiv="ScreenOrientation" content="autoRotate:disabled"></meta>
             </Helmet>
-            <App/>
 
+
+            <BrowserRouter>
+                <div className="App" style={{ fontFamily: "Roboto" }}>
+                    <Container fluid>
+                        <Header />
+
+                        <Route path="/" exact component={OrderPicking} />
+                        <Route path="/users" component={AsyncUser} />
+                    </Container>
+                </div>
+            </BrowserRouter>
         </div>
     );
 }

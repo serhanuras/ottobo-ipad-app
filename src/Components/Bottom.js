@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Row, Col, Container } from 'react-bootstrap';
-import '../App.css';
+import './bottom.css';
 
 
 const Bottom = props => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import Bottom from "../Components/Bottom";
-import "./RoutePage.css";
+import Bottom from "../../../components/bottom";
+import "./routing.css";
 
 const RoutePage = props => {
   return (
