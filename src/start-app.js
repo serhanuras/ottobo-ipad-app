@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from "react-dom";
 import { } from "react-router-dom";
 import { Route, BrowserRouter } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Container } from "react-bootstrap";
+
 import GoogleFontLoader from 'react-google-font-loader';
 import OrderPicking from './containers/order-picking-container/order-picking';
 import Header from "./components/header";

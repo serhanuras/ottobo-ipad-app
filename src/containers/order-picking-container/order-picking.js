@@ -1,181 +1,62 @@
 import React, { Component } from "react";
-import axios from "axios";
-import OrderPage from "./pages/order";
-
+import { connect } from 'react-redux';
 import Routing from "./pages/routing";
 import Completed from "./pages/completed";
 import Loader from "../../components/loader";
 import Hoc from '../../components/hoc';
-import * as config from "../../config";
+import * as actionCreators from '../../store/actions/index';
 import "./order-picking.css";
+import Order from "./pages/order";
 
 class OrderPicking extends Component {
-  constructor() {
-    super();
 
-    let isBarcodeControlWorking = true;
-
-    if (this.getUrlParameter("env") === "test") {
-      isBarcodeControlWorking = false;
-    }
-
-    this.state = {
-      loading: true,
-      location: "",
-      currentOrderIndex: 0,
-      orders: [],
-      activeBaskets: [],
-      isRobotWalking: true,
-      isRobotAtDestination: false,
-      robotWalkingTimeout: null,
-      isCompleted: false,
-      isBarcodeControlWorking: isBarcodeControlWorking
-    };
-  }
-
-  getUrlParameter = name => {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-  };
-
-  nextOrderHandler = () => {
-    console.log("[App.js] nextOrderHandler is called...");
-
-    this.setState({
-      loading: true
-    });
-
-    setTimeout(() => {
-      this.setState({
-        loading: false,
-        currentOrderIndex: this.state.currentOrderIndex + 1
-      });
-    }, 2000);
-  };
-
-  changeRobotWalkingState = () => {
-    if (this.state.isRobotWalking) {
-      console.log(this.state.isRobotWalking);
-      this.setState({
-        isRobotWalking: !this.state.isRobotWalking,
-        robotWalkingTimeout: null
-      });
-      clearTimeout(this.state.robotWalkingTimeout);
-    } else {
-      this.setState({
-        isRobotWalking: !this.state.isRobotWalking
-      });
-    }
-  };
 
   componentDidMount() {
-    this.gotoNextDestination();
+    //this.gotoNextDestination();
+
+    this.props.onGoToNextDestination();
   }
 
-  getOrderDetails = () => {
-    setTimeout(() => {
-      axios
-        .post(`${config.getServerURL()}/orders`, {
-          location_id: this.state.location
-        })
-        .then(res => {
-          console.log(res);
-
-          const orders = res.data;
-          const activeBaskets = [];
-
-          orders.forEach(order => {
-            console.log(1, order.basketId);
-            activeBaskets.push(order.basketId);
-          });
-
-          this.setState({
-            loading: false,
-            orders: res.data,
-            activeBaskets: activeBaskets
-          });
-        })
-        .catch(err => {
-          alert(`Error has occured. REF:[${err}]`);
-        });
-    }, 3000);
-  };
-
-  setWalkingTimeout = () =>
-    setTimeout(() => {
-      this.setState({
-        loading: true,
-        isRobotAtDestination: true,
-        isRobotWalking: false
-      });
-    }, 5000);
-
   componentDidUpdate() {
-    console.log("[App.js] componentDidUpdated...", this.state);
+    console.log("[App.js] componentDidUpdated...", this.props.orderPickingState);
 
     if (
-      this.state.loading === false &&
-      this.state.isRobotWalking === true &&
-      this.state.robotWalkingTimeout === null &&
-      this.state.isCompleted === false
+      this.props.orderPickingState.loading === false &&
+      this.props.orderPickingState.isRobotWalking === true &&
+      this.props.orderPickingState.isCompleted === false
     ) {
-      this.setState({
-        robotWalkingTimeout: this.setWalkingTimeout()
-      });
+      this.robotWalkingtInterval =
+        setTimeout(() => {
+          this.props.onRobotArrivedDestination();
+        }, 3000);
+
     } else if (
-      this.state.loading === true &&
-      this.state.isRobotAtDestination === true &&
-      this.state.isCompleted === false
+      this.props.orderPickingState.loading === true &&
+      this.props.orderPickingState.isRobotAtDestination === true &&
+      this.props.orderPickingState.isCompleted === false
     ) {
-      this.getOrderDetails();
+      this.props.onGetOrderDetails();
     }
   }
 
-  gotoNextDestination = () => {
-    this.setState({
-      loading: true,
-      currentOrderIndex: 0,
-      orders: [],
-      activeBaskets: [],
-      isRobotWalking: true,
-      isRobotAtDestination: false,
-      robotWalkingTimeout: null
-    });
+  toggleRobotWalking=()=>{
 
-    setTimeout(() => {
-      axios
-        .post(`${config.getServerURL()}/get-location`, {
-          prev_location_id: this.state.location
-        })
-        .then(res => {
-          if (res.data.location !== "{ENDED}") {
-            this.setState({
-              loading: false,
-              location: res.data.location
-            });
-          }
-          else {
-            this.setState(
-              {
-                loading: false,
-                location: "",
-                currentOrderIndex: 0,
-                orders: [],
-                activeBaskets: [],
-                isRobotWalking: true,
-                isRobotAtDestination: false,
-                robotWalkingTimeout: null,
-                isCompleted: true,
-                isBarcodeControlWorking: false
-              }
-            )
-          }
-        })
-        .catch(err => {
-          alert(`Error has occured. REF:[${err}]`);
-        });
-    }, 2000);
-  };
+
+    if(this.props.orderPickingState.isRobotWalking){
+      clearInterval(this.robotWalkingtInterval);
+    }
+    else{
+      this.robotWalkingtInterval =
+        setTimeout(() => {
+          this.props.onRobotArrivedDestination();
+        }, 3000);
+    }
+
+    this.props.onToggleRobotWalkingState();
+
+    
+    
+  }
 
   render() {
     let { innerWidth: width } = window;
@@ -188,30 +69,21 @@ class OrderPicking extends Component {
 
     return (
       <Hoc>
-        {this.state.loading ? (
+        {this.props.orderPickingState.loading ? (
           <Loader height="60px" width="15px" marginTop={width + "px"} />
         ) : (
             <div>
-              {this.state.isCompleted ? (
+              {this.props.orderPickingState.isCompleted ? (
                 <Completed />
               ) : (
                   <div>
-                    {this.state.isRobotAtDestination ? (
-                      <OrderPage
-                        order={this.state.orders[this.state.currentOrderIndex]}
-                        activeBaskets={this.state.activeBaskets}
-                        location={this.state.location}
-                        nextOrder={this.nextOrderHandler}
-                        gotoNextDestination={this.gotoNextDestination}
-                        isBarcodeControlWorking={
-                          this.state.isBarcodeControlWorking
-                        }
-                      />
+                    {this.props.orderPickingState.isRobotAtDestination ? (
+                      <Order/>
                     ) : (
                         <Routing
-                          onClick={this.changeRobotWalkingState}
-                          isRobotWalking={this.state.isRobotWalking}
-                          location={this.state.location}
+                          onClick={this.toggleRobotWalking}
+                          isRobotWalking={this.props.orderPickingState.isRobotWalking}
+                          location={this.props.orderPickingState.location}
                         />
                       )}
                   </div>
@@ -223,4 +95,25 @@ class OrderPicking extends Component {
   }
 }
 
-export default OrderPicking;
+
+const mapStateToProps = state => {
+  return {
+
+    orderPickingState: state.orderPickingState,
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onToogleLoading: () => dispatch(actionCreators.toogle_loading()),
+    onGotoNextOrder: () => dispatch(actionCreators.goto_next_order()),
+    onToggleRobotWalkingState: () => dispatch(actionCreators.toggle_robot_walking_state()),
+    onGoToNextDestination: () => dispatch(actionCreators.goto_next_destination()),
+    onGetOrderDetails: () => dispatch(actionCreators.get_order_details()),
+    onRobotArrivedDestination: () => dispatch(actionCreators.robot_arrived_destination()),
+
+
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderPicking);
