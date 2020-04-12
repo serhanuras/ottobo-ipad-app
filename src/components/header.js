@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
 
 import { Row, Col, Navbar } from 'react-bootstrap';
 import { FaRegUserCircle } from 'react-icons/fa';
@@ -7,12 +8,41 @@ import { FiMonitor } from 'react-icons/fi';
 import logo from '../assets/images/ottobo.png'
 import './header.css';
 
-function Header() {
+function Header(props) {
+
+    let width = 0;
+    let valueNow = 0;
+    if(props.orderPickingState.locationCount>1)
+    {
+        width = (props.orderPickingState.locationCount-1) / 5 * 100;
+    }
+
+    if(props.orderPickingState.locationCount>2)
+    {
+        valueNow = (props.orderPickingState.locationCount-2) / 5 * 100;
+    }
+   
+
     return (
-        <Navbar fixed="top" style={{ width: "100%", padding: "0px", margin: '0px', backgroundColor: "#f7f7f7" }} >
+        <Navbar fixed="top" className="navbar" >
             <Row className="Header-row">
-                <Col className="col1">
-                    <FiMonitor />
+                <Col className="col1" style={{ paddingRight: "0px", paddingLeft: "0px" }}>
+                    <Row>
+                        <Col className="monitor">
+                            <FiMonitor />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div className="progress" >
+
+                                <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow={valueNow} aria-valuemin="0" aria-valuemax="100" style={{ width: width + "%" }}>
+                                    {width}%
+                         </div>
+                            </div>
+                        </Col>
+                    </Row>
+
                 </Col>
                 <Col xs={5}>
                     <div className="col2">
@@ -22,7 +52,7 @@ function Header() {
                 <Col className="col3">
                     <Link to="/users">
                         <div> <FaRegUserCircle /></div>
-                        <div>Mustafa Serhan Uras</div>
+                        <div>{props.userState.user.name} {props.userState.user.surname}</div>
                     </Link>
                 </Col>
             </Row>
@@ -30,4 +60,15 @@ function Header() {
     );
 }
 
-export default React.memo(Header);
+
+const mapStateToProps = state => {
+    return {
+
+        userState: state.userState,
+        orderPickingState: state.orderPickingState,
+    }
+};
+
+
+export default connect(mapStateToProps)(Header);
+

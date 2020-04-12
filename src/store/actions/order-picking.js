@@ -76,8 +76,9 @@ export const goto_next_destination = () => {
                             type: actionTypes.GOTO_NEXT_DESTINATION,
                             newState: {
                                 loading: false,
-                                location: res.data.location,
-                                pickedOrders:[...currenState.pickedOrders]
+                                location: res.data.location, 
+                                pickedOrders:[...currenState.pickedOrders],
+                                locationCount: currenState.locationCount + 1,
                             }
                         }
                     })());
@@ -98,7 +99,9 @@ export const goto_next_destination = () => {
                                 robotWalkingTimeout: null,
                                 isCompleted: true,
                                 isBarcodeControlWorking: false,
-                                pickedOrders:[...currenState.pickedOrders]
+                                pickedOrders:[...currenState.pickedOrders],
+                                locationCount: currenState.locationCount + 1,
+                                
                             }
                         }
                     })());

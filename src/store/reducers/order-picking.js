@@ -16,6 +16,7 @@ if (getUrlParameter("env") === "test") {
 const initialState = {
     loading: true,
     location: "",
+    locationCount:0,
     currentOrderIndex: 0,
     orders: [],
     pickedOrders : [],

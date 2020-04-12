@@ -5,12 +5,14 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import orderPickingReducer from './store/reducers/order-picking';
+import userReducer from './store/reducers/user';
 import './index.css';
 import StartApp from './start-app';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const rootReducer = combineReducers({
     orderPickingState: orderPickingReducer,
+    userState: userReducer
 });
 
 
