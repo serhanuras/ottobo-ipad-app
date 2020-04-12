@@ -12,15 +12,16 @@ const Order = props => {
   console.log("arra", props.orderPickingState.activeBaskets);
 
   const getOrder = () => {
-    return props.orderPickingState.orders[props.orderPickingState.currentOrderIndex]
+    const order = props.orderPickingState.orders[props.orderPickingState.currentOrderIndex]
+
+    return order;
   }
 
   const [customState, setCustomState] = useState({
-    quantity: getOrder().quantity,
-    picked: 0,
     error: null,
-    showConfirmationModal: false,
+    showConfirmationToGoNextDestination: false,
     showScanner: false,
+    showConfirmPickedQuantity: false,
     isConfimButtonDisabled: true
   });
 
@@ -30,56 +31,54 @@ const Order = props => {
     };
   }, []);
 
+  const onToogleConfirmPickedQuantity = () => {
 
-  const onToggleScanner = type => {
+    customState.showConfirmPickedQuantity = !customState.showConfirmPickedQuantity;
 
-    console.log(type);
-    if (type === "scan") {
+    setCustomState({
+      ...customState
+    });
 
-      customState.showScanner = !customState.showScanner
+
+  }
+
+  const onToggleScanner = () => {
+
+    customState.showScanner = !customState.showScanner;
+
+
+    setCustomState({
+      ...customState
+    });
+
+  };
+
+  const gotoNext = () => {
+    if (getOrder().basketId ===
+      props.orderPickingState.activeBaskets[props.orderPickingState.activeBaskets.length - 1]
+    ) {
+      customState.showConfirmationToGoNextDestination = true;
 
       setCustomState({
         ...customState
       });
+    } else {
+      props.onGotoNextOrder();
     }
-  };
+  }
+
 
   let isBarcodeScanned = false;
   const _onDetected = result => {
-    console.log(result);
+
     if (isBarcodeScanned === false) {
       isBarcodeScanned = true;
-
-      console.log(result.codeResult.code);
 
       if (
         getOrder().barcode === result.codeResult.code ||
         props.orderPickingState.isBarcodeControlWorking === false
       ) {
-        customState.picked = ++customState.picked;
-
-        if (customState.picked === customState.quantity) {
-          if (
-            getOrder().basketId ===
-            props.orderPickingState.activeBaskets[props.orderPickingState.activeBaskets.length - 1]
-          ) {
-            customState.showConfirmationModal = true;
-
-            setCustomState({
-              ...customState
-            });
-          } else {
-            props.onGotoNextOrder();
-          }
-        } else {
-          setCustomState({
-            ...customState
-          });
-
-          setInterval(() => {
-            isBarcodeScanned = false;
-          }, 2500);
-        }
+        gotoNext()
       } else {
         customState.error = {
           title: "Invalid Barcode Code",
@@ -97,22 +96,6 @@ const Order = props => {
     }
   };
 
-  const updatePicked = type => {
-    if (type === "+") {
-      customState.picked = customState.picked + 1;
-      setCustomState({
-        ...customState
-      });
-    } else {
-      if (customState.picked > 0) {
-        customState.picked = customState.picked - 1;
-        setCustomState({
-          ...customState
-        });
-      }
-    }
-  };
-
   const handleErrorModelClose = () => {
     customState.error = null;
     setCustomState({
@@ -120,7 +103,7 @@ const Order = props => {
     });
   };
 
-  const confirmPicking = () => {
+  const onConfirmPicking = () => {
     props.onGoToNextDestination();
   };
 
@@ -167,19 +150,19 @@ const Order = props => {
             <Col>
               <Row>
                 <Col style={{ fontSize: "40px", fontWeight: "600" }}>
-                  {customState.quantity}
+                  {getOrder().quantity}
                 </Col>
               </Row>
               <Row style={{ marginTop: "40px" }}>
                 <Col> PICKED </Col>
               </Row>
               <Row>
-                <Col className="picked">{customState.picked}</Col>
+                <Col className="picked">{getOrder().picked}</Col>
                 <Col style={{ textAlign: "left" }}>
                   <Button
                     variant="primary"
                     className="pickedbutton"
-                    onClick={() => updatePicked("+")}
+                    onClick={() => props.onUpdateOrderPickedQuantity("add")}
                   >
                     +
                   </Button>{" "}
@@ -187,7 +170,7 @@ const Order = props => {
                   <Button
                     variant="primary"
                     className="pickedbutton"
-                    onClick={() => updatePicked("-")}
+                    onClick={() => props.onUpdateOrderPickedQuantity("substract")}
                   >
                     -
                   </Button>
@@ -286,7 +269,7 @@ const Order = props => {
 
 
       <Bottom
-        onClick={onToggleScanner}
+        onClick={onToogleConfirmPickedQuantity}
         type="orderPage"
         isConfimButtonActive={customState.isConfimButtonDisabled}
 
@@ -322,7 +305,7 @@ const Order = props => {
           customState.error !== null
         )}
 
-      {customState.showConfirmationModal ? (
+      {customState.showConfirmationToGoNextDestination ? (
         <Modal
           show={true}
           size="lg"
@@ -343,10 +326,60 @@ const Order = props => {
             <Button
               variant="success"
               size="lg"
-              onClick={confirmPicking}
+              onClick={onConfirmPicking}
               className="button"
             >
-              CONFIRM PICKING
+              CONFIRM PICKING & GO TO NEXT DESTINATION
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      ) : null}
+
+      {customState.showConfirmPickedQuantity ? (
+        <Modal
+          show={true}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          onHide={onToogleConfirmPickedQuantity}
+          className="model"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title className="title">
+              Confirm to go next destination
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="body">
+            Required quantity to this tray is <b>{customState.quantity}.</b> <br />
+            Picked quantity is <b>{customState.picked}</b>.
+            <br /><br />Confirm to scan & goto next tray ?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="success"
+              size="lg"
+              onClick={() => {
+
+
+                if (getOrder().picked === 0)
+                  gotoNext();
+                else
+                  onToggleScanner();
+
+
+                onToogleConfirmPickedQuantity()
+              }}
+              className="button"
+            >
+              CONFIRM SCAN & GOTO NEXT TRAY
+            </Button>
+            <Button
+              variant="danger"
+              size="lg"
+              onClick={onToogleConfirmPickedQuantity}
+              className="button"
+            >
+              CANCEL
             </Button>
           </Modal.Footer>
         </Modal>
@@ -372,6 +405,7 @@ const mapDispatchToProps = dispatch => {
     onGoToNextDestination: () => dispatch(actionCreators.goto_next_destination()),
     onGetOrderDetails: () => dispatch(actionCreators.get_order_details()),
     onRobotArrivedDestination: () => dispatch(actionCreators.robot_arrived_destination()),
+    onUpdateOrderPickedQuantity: (type) => dispatch(actionCreators.update_order_picked_quantity(type)),
 
 
   }

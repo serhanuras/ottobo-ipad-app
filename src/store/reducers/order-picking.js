@@ -18,6 +18,7 @@ const initialState = {
     location: "",
     currentOrderIndex: 0,
     orders: [],
+    pickedOrders : [],
     activeBaskets: [],
     isRobotWalking: true,
     isRobotAtDestination: false,
@@ -59,6 +60,8 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, action.newState);
         case actionTypes.ROBOT_ARRIVED_DESTINATION:
             return updateObject(state, robot_arrived_destination(state));
+        case actionTypes.UPDATE_ORDER_PICKED_QUANTITY:
+            return updateObject(state, action.newState);
         default:
             return state;
 

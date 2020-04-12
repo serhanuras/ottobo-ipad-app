@@ -30,17 +30,19 @@ class OrderPicking extends Component {
           this.props.onRobotArrivedDestination();
         }, 3000);
 
-    } else if (
-      this.props.orderPickingState.loading === true &&
-      this.props.orderPickingState.isRobotAtDestination === true &&
-      this.props.orderPickingState.isCompleted === false
-    ) {
-      this.props.onGetOrderDetails();
-    }
+    } 
+    
+    // else if (
+    //   this.props.orderPickingState.loading === true &&
+    //   this.props.orderPickingState.isRobotAtDestination === true &&
+    //   this.props.orderPickingState.isCompleted === false
+    // ) {
+    //   if(this.props.orderPickingState.currentOrderIndex==0)
+    //     this.props.onGetOrderDetails();
+    // }
   }
 
   toggleRobotWalking=()=>{
-
 
     if(this.props.orderPickingState.isRobotWalking){
       clearInterval(this.robotWalkingtInterval);
@@ -53,9 +55,6 @@ class OrderPicking extends Component {
     }
 
     this.props.onToggleRobotWalkingState();
-
-    
-    
   }
 
   render() {

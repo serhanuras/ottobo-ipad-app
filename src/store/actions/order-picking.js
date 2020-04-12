@@ -24,15 +24,6 @@ export const goto_next_order = () => {
 
             const oldState = getState().orderPickingState;
 
-            console.log({
-                type: actionTypes.GOTO_NEXT_ORDER,
-                newState: {
-                    loading: false,
-                    currentOrderIndex: oldState.currentOrderIndex + 1
-                }
-            }
-            )
-
             return {
                 type: actionTypes.GOTO_NEXT_ORDER,
                 newState: {
@@ -70,6 +61,13 @@ export const goto_next_destination = () => {
                 prev_location_id: currenState.location
             })
             .then(res => {
+
+                if (currenState.orders.length > 0) {
+                    currenState.pickedOrders.push(currenState.orders);
+                    console.log(currenState.pickedOrders)
+                }
+
+
                 if (res.data.location !== "{ENDED}") {
 
                     dispatch((() => {
@@ -78,7 +76,8 @@ export const goto_next_destination = () => {
                             type: actionTypes.GOTO_NEXT_DESTINATION,
                             newState: {
                                 loading: false,
-                                location: res.data.location
+                                location: res.data.location,
+                                pickedOrders:[...currenState.pickedOrders]
                             }
                         }
                     })());
@@ -98,7 +97,8 @@ export const goto_next_destination = () => {
                                 isRobotAtDestination: false,
                                 robotWalkingTimeout: null,
                                 isCompleted: true,
-                                isBarcodeControlWorking: false
+                                isBarcodeControlWorking: false,
+                                pickedOrders:[...currenState.pickedOrders]
                             }
                         }
                     })());
@@ -123,10 +123,16 @@ export const get_order_details = () => {
             })
             .then(res => {
                 const orders = res.data;
+                const temporders = [];
                 const activeBaskets = [];
 
                 orders.forEach(order => {
                     activeBaskets.push(order.basketId);
+
+                    if(order['picked']===undefined)
+                        order.picked = 0;
+
+                    temporders.push({...order});
                 });
 
                 dispatch((() => {
@@ -135,7 +141,7 @@ export const get_order_details = () => {
                         type: actionTypes.GET_ORDER_DETAILS,
                         newState: {
                             loading: false,
-                            orders: res.data,
+                            orders: temporders,
                             activeBaskets: activeBaskets
                         }
                     }
@@ -149,7 +155,83 @@ export const get_order_details = () => {
 
 
 export const robot_arrived_destination = () => {
-    return {
-        type: actionTypes.ROBOT_ARRIVED_DESTINATION,
-    };
+    
+
+    return (dispatch, getState) => {
+
+        dispatch((() => {
+            return {
+                type: actionTypes.ROBOT_ARRIVED_DESTINATION,
+            };
+        })());
+
+        const currenState = getState().orderPickingState;
+
+        axios
+            .post(`${config.getServerURL()}/orders`, {
+                location_id: currenState.location
+            })
+            .then(res => {
+                const orders = res.data;
+                const temporders = [];
+                const activeBaskets = [];
+
+                orders.forEach(order => {
+                    activeBaskets.push(order.basketId);
+
+                    if(order['picked']===undefined)
+                        order.picked = 0;
+                        
+                    temporders.push({...order});
+                });
+
+                dispatch((() => {
+
+                    return {
+                        type: actionTypes.GET_ORDER_DETAILS,
+                        newState: {
+                            loading: false,
+                            orders: temporders,
+                            activeBaskets: activeBaskets
+                        }
+                    }
+                })());
+            })
+            .catch(err => {
+                alert(`Error has occured. REF:[${err}]`);
+            });
+    }
+};
+
+
+
+export const update_order_picked_quantity = (type) => {
+    return (dispatch, getState) => {
+
+        const currenState = getState().orderPickingState;
+        const order = currenState.orders[currenState.currentOrderIndex];
+
+        if (type === 'add') {
+            order.picked = order.picked + 1;
+        }
+        else {
+            if (order.picked > 0)
+                order.picked = order.picked - 1;
+        }
+        currenState.orders[currenState.currentOrderIndex] = order;
+
+        dispatch((() => {
+
+            console.log('serhan2222',[...currenState.orders]);
+
+            return {
+                type: actionTypes.UPDATE_ORDER_PICKED_QUANTITY,
+                newState: {
+                    loading: false,
+                    orders: [...currenState.orders]
+                }
+            }
+        })());
+
+    }
 };
