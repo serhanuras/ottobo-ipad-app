@@ -97,15 +97,15 @@ const Order = props => {
     }
   };
 
-  const updateQuantity = type => {
+  const updatePicked = type => {
     if (type === "+") {
-      customState.quantity = customState.quantity + 1;
+      customState.picked = customState.picked + 1;
       setCustomState({
         ...customState
       });
     } else {
-      if (customState.quantity > 1) {
-        customState.quantity = customState.quantity - 1;
+      if (customState.picked > 0) {
+        customState.picked = customState.picked - 1;
         setCustomState({
           ...customState
         });
@@ -166,31 +166,31 @@ const Order = props => {
           <Row style={{ marginTop: "20px" }}>
             <Col>
               <Row>
-                <Col className="quantity">{customState.quantity}</Col>
-                <Col style={{ textAlign: "left" }}>
-                  <Button
-                    variant="primary"
-                    className="quantitybutton"
-                    onClick={() => updateQuantity("+")}
-                  >
-                    +
-                  </Button>{" "}
-                  <br />
-                  <Button
-                    variant="primary"
-                    className="quantitybutton"
-                    onClick={() => updateQuantity("-")}
-                  >
-                    -
-                  </Button>
+                <Col style={{ fontSize: "40px", fontWeight: "600" }}>
+                  {customState.quantity}
                 </Col>
               </Row>
               <Row style={{ marginTop: "40px" }}>
                 <Col> PICKED </Col>
               </Row>
               <Row>
-                <Col style={{ fontSize: "40px", fontWeight: "600" }}>
-                  {customState.picked}
+                <Col className="picked">{customState.picked}</Col>
+                <Col style={{ textAlign: "left" }}>
+                  <Button
+                    variant="primary"
+                    className="pickedbutton"
+                    onClick={() => updatePicked("+")}
+                  >
+                    +
+                  </Button>{" "}
+                  <br />
+                  <Button
+                    variant="primary"
+                    className="pickedbutton"
+                    onClick={() => updatePicked("-")}
+                  >
+                    -
+                  </Button>
                 </Col>
               </Row>
             </Col>
