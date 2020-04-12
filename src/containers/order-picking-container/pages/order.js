@@ -350,9 +350,17 @@ const Order = props => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="body">
-            Required quantity to this tray is <b>{customState.quantity}.</b> <br />
-            Picked quantity is <b>{customState.picked}</b>.
-            <br /><br />Confirm to scan & goto next tray ?
+            Required quantity to this tray is <b>{getOrder().quantity}.</b> <br />
+            Picked quantity is <b>{getOrder().picked}</b>.
+
+            {
+              getOrder().picked !== 0 ? (
+                <div><br />Confirm to scan & goto next tray ?</div>
+              ) : (
+                  <div><br />Confirm to goto next tray ?</div>
+                )
+            }
+
           </Modal.Body>
           <Modal.Footer>
             <Button

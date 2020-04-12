@@ -10,16 +10,17 @@ import './header.css';
 
 function Header(props) {
 
+
     let width = 0;
     let valueNow = 0;
-    if(props.orderPickingState.locationCount>1)
+    if(props.orderPickingState.visitedDestionationCount>1)
     {
-        width = (props.orderPickingState.locationCount-1) / 5 * 100;
+        width = (props.orderPickingState.visitedDestionationCount-1) / props.orderPickingState.totalDestionationNumber * 100;
     }
 
-    if(props.orderPickingState.locationCount>2)
+    if(props.orderPickingState.visitedDestionationCount>2)
     {
-        valueNow = (props.orderPickingState.locationCount-2) / 5 * 100;
+        valueNow = (props.orderPickingState.visitedDestionationCount-2) / props.orderPickingState.totalDestionationNumber * 100;
     }
    
 

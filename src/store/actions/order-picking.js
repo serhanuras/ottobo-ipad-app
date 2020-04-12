@@ -68,44 +68,46 @@ export const goto_next_destination = () => {
                 }
 
 
-                if (res.data.location !== "{ENDED}") {
-
-                    dispatch((() => {
-
-                        return {
-                            type: actionTypes.GOTO_NEXT_DESTINATION,
-                            newState: {
-                                loading: false,
-                                location: res.data.location, 
-                                pickedOrders:[...currenState.pickedOrders],
-                                locationCount: currenState.locationCount + 1,
-                            }
-                        }
-                    })());
+                if (res.data.location === "{ENDED}") {
+                    res.data.location = "PICKING STATION 1"
                 }
-                else {
-                    dispatch((() => {
 
-                        return {
-                            type: actionTypes.GOTO_NEXT_DESTINATION,
-                            newState: {
-                                loading: false,
-                                location: "",
-                                currentOrderIndex: 0,
-                                orders: [],
-                                activeBaskets: [],
-                                isRobotWalking: true,
-                                isRobotAtDestination: false,
-                                robotWalkingTimeout: null,
-                                isCompleted: true,
-                                isBarcodeControlWorking: false,
-                                pickedOrders:[...currenState.pickedOrders],
-                                locationCount: currenState.locationCount + 1,
-                                
-                            }
+                dispatch((() => {
+
+                    return {
+                        type: actionTypes.GOTO_NEXT_DESTINATION,
+                        newState: {
+                            loading: false,
+                            location: res.data.location,
+                            pickedOrders: [...currenState.pickedOrders],
+                            visitedDestionationCount: currenState.visitedDestionationCount + 1,
                         }
-                    })());
-                }
+                    }
+                })());
+                // }
+                // else {
+                //     dispatch((() => {
+
+                //         return {
+                //             type: actionTypes.GOTO_NEXT_DESTINATION,
+                //             newState: {
+                //                 loading: false,
+                //                 location: "",
+                //                 currentOrderIndex: 0,
+                //                 orders: [],
+                //                 activeBaskets: [],
+                //                 isRobotWalking: true,
+                //                 isRobotAtDestination: false,
+                //                 robotWalkingTimeout: null,
+                //                 isCompleted: true,
+                //                 isBarcodeControlWorking: false,
+                //                 pickedOrders:[...currenState.pickedOrders],
+                //                 visitedDestionationCount: currenState.visitedDestionationCount + 1,
+
+                //             }
+                //         }
+                //     })());
+                // }
             })
             .catch(err => {
                 alert(`Error has occured. REF:[${err}]`);
@@ -120,6 +122,9 @@ export const get_order_details = () => {
 
         const currenState = getState().orderPickingState;
 
+
+
+
         axios
             .post(`${config.getServerURL()}/orders`, {
                 location_id: currenState.location
@@ -132,10 +137,10 @@ export const get_order_details = () => {
                 orders.forEach(order => {
                     activeBaskets.push(order.basketId);
 
-                    if(order['picked']===undefined)
+                    if (order['picked'] === undefined)
                         order.picked = 0;
 
-                    temporders.push({...order});
+                    temporders.push({ ...order });
                 });
 
                 dispatch((() => {
@@ -158,51 +163,81 @@ export const get_order_details = () => {
 
 
 export const robot_arrived_destination = () => {
-    
+
+
 
     return (dispatch, getState) => {
 
-        dispatch((() => {
-            return {
-                type: actionTypes.ROBOT_ARRIVED_DESTINATION,
-            };
-        })());
-
         const currenState = getState().orderPickingState;
 
-        axios
-            .post(`${config.getServerURL()}/orders`, {
-                location_id: currenState.location
-            })
-            .then(res => {
-                const orders = res.data;
-                const temporders = [];
-                const activeBaskets = [];
+        if (currenState.visitedDestionationCount-1 === currenState.totalDestionationNumber) {
 
-                orders.forEach(order => {
-                    activeBaskets.push(order.basketId);
+            dispatch((() => {
+                return {
+                    type: actionTypes.GOTO_NEXT_DESTINATION,
+                    newState: {
+                        loading: false,
+                        location: "",
+                        currentOrderIndex: 0,
+                        orders: [],
+                        activeBaskets: [],
+                        isRobotWalking: true,
+                        isRobotAtDestination: false,
+                        robotWalkingTimeout: null,
+                        isCompleted: true,
+                        isBarcodeControlWorking: false,
+                        pickedOrders: [...currenState.pickedOrders],
+                        visitedDestionationCount: currenState.visitedDestionationCount + 1,
 
-                    if(order['picked']===undefined)
-                        order.picked = 0;
-                        
-                    temporders.push({...order});
-                });
-
-                dispatch((() => {
-
-                    return {
-                        type: actionTypes.GET_ORDER_DETAILS,
-                        newState: {
-                            loading: false,
-                            orders: temporders,
-                            activeBaskets: activeBaskets
-                        }
                     }
-                })());
-            })
-            .catch(err => {
-                alert(`Error has occured. REF:[${err}]`);
-            });
+                }
+            })());
+        }
+        else {
+
+
+            dispatch((() => {
+                return {
+                    type: actionTypes.ROBOT_ARRIVED_DESTINATION,
+                };
+            })());
+
+
+
+            axios
+                .post(`${config.getServerURL()}/orders`, {
+                    location_id: currenState.location
+                })
+                .then(res => {
+                    const orders = res.data;
+                    const temporders = [];
+                    const activeBaskets = [];
+
+                    orders.forEach(order => {
+                        activeBaskets.push(order.basketId);
+
+                        if (order['picked'] === undefined)
+                            order.picked = 0;
+
+                        temporders.push({ ...order });
+                    });
+
+                    dispatch((() => {
+
+                        return {
+                            type: actionTypes.GET_ORDER_DETAILS,
+                            newState: {
+                                loading: false,
+                                orders: temporders,
+                                activeBaskets: activeBaskets
+                            }
+                        }
+                    })());
+                })
+                .catch(err => {
+                    alert(`Error has occured. REF:[${err}]`);
+                });
+        }
     }
 };
 
@@ -225,7 +260,7 @@ export const update_order_picked_quantity = (type) => {
 
         dispatch((() => {
 
-            console.log('serhan2222',[...currenState.orders]);
+            console.log('serhan2222', [...currenState.orders]);
 
             return {
                 type: actionTypes.UPDATE_ORDER_PICKED_QUANTITY,
